@@ -1,6 +1,7 @@
 package facades;
 
 import data.Data;
+import services.LogService;
 
 import java.sql.*;
 import java.util.Iterator;
@@ -8,12 +9,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DatabaseFacade {
+    LogService logService;
+
+    public DatabaseFacade(LogService logService) {
+        this.logService = logService;
+    }
 
     public Connection getConnection() throws SQLException {
         String url = "jdbc:mysql://localhost:3306/world?serverTimezone=Europe/Moscow&useSSL=false";
         String username = "root";
         String password = "root";
-        System.out.println("Connecting...");
+        this.logService.log("Connecting...");
 
         return DriverManager.getConnection(url, username, password);
     }
@@ -23,9 +29,9 @@ public class DatabaseFacade {
             Statement stmt = connection.createStatement();
 
             stmt.executeUpdate("delete from test;");
-            System.out.println("deleting success!");
+            this.logService.log("deleting success!");
         } catch (SQLException e) {
-            System.out.println("Connection failed!");
+            this.logService.log("Connection failed!");
             e.printStackTrace();
         }
     }
@@ -46,7 +52,7 @@ public class DatabaseFacade {
                 Boolean isUpdateStep = i % 1000 == 0 || !it.hasNext();
 
                 if (isUpdateStep) {
-                    System.out.println(i);
+                    this.logService.log(i);
                     stmt.executeUpdate("INSERT into test values "+ query +';');
                     query = "";
                 } else {
@@ -54,9 +60,9 @@ public class DatabaseFacade {
                 }
             }
 
-            System.out.println("Insert successful!");
+            this.logService.log("Insert successful!");
         } catch (SQLException e) {
-            System.out.println("Connection failed!");
+            this.logService.log("Connection failed!");
             e.printStackTrace();
         }
     }

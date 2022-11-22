@@ -4,6 +4,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import services.LogService;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,6 +14,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 class ReportExcelReader {
+    LogService logService;
+
+    public ReportExcelReader(LogService logService) {
+        this.logService = logService;
+    }
+
     public List read() {
         InputStream inputStream = null;
         XSSFWorkbook workBook = null;

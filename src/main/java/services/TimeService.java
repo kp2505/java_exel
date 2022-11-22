@@ -2,14 +2,17 @@ package services;
 
 public class TimeService {
     long startTime;
+    LogService logService;
 
-    public TimeService() {
+    public TimeService( LogService logService) {
         this.startTime = System.currentTimeMillis();
+        this.logService = logService;
+        this.logService.log("###STARTED###");
     }
 
     public void logTimeOffset() {
         long endTime = System.currentTimeMillis();
 
-        System.out.println("That took " + (endTime - this.startTime)/1000 + " seconds");
+        this.logService.log("###FINISHED###\n That took " + (endTime - this.startTime)/1000 + " seconds");
     }
 }

@@ -3,6 +3,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import services.LogService;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -14,11 +15,13 @@ class ReportExcelWriter {
 
     private final XSSFWorkbook wb;
     private final XSSFSheet sheet;
+    LogService logService;
 
-    public ReportExcelWriter() {
+    public ReportExcelWriter(LogService logService) {
         this.wb = new XSSFWorkbook();
         this.sheet = wb.createSheet();
         createTitle();
+        this.logService = logService;
     }
 
     public void createRow(int index, Data data) {
@@ -53,7 +56,7 @@ class ReportExcelWriter {
             i++;
 
             if (i % 1000 == 0) {
-                System.out.println(i);
+                this.logService.log(i);
             }
             this.createRow(i,item);
         }
