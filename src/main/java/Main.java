@@ -20,7 +20,7 @@ public class Main {
         ReportExcelWriter  writer = new ReportExcelWriter(logService);
 
         databaseFacade.clearTable();
-        List<Data> inputData = reader.read();
+        List<Data> inputData = reader.read("./test");
 
         databaseFacade.insert(inputData);
 

@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import services.LogService;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,21 +21,29 @@ class ReportExcelReader {
         this.logService = logService;
     }
 
-    public List read() {
+    public List read(String fileFolder) {
         InputStream inputStream = null;
         XSSFWorkbook workBook = null;
+        List dataList = new LinkedList();
+        File folder = new File(fileFolder);
+        File[] listOfFiles = folder.listFiles();
 
-        try {
-            inputStream = new FileInputStream("C:\\Users\\User\\Downloads\\input.csv");
-            workBook = new XSSFWorkbook(inputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (File file : listOfFiles) {
+            if (file.isFile()) {
+                try {
+                    inputStream = new FileInputStream(fileFolder + "\\" + file.getName());
+                    workBook = new XSSFWorkbook(inputStream);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Sheet sheet = workBook.getSheetAt(0);
+                Iterator<Row> rows = sheet.iterator();
+                dataList.addAll(this.getDataList(rows));
+            }
         }
 
-        Sheet sheet = workBook.getSheetAt(0);
-        Iterator<Row> rows = sheet.iterator();
-
-        return this.getDataList(rows);
+        return dataList;
     }
 
     public List getDataList(Iterator<Row> rows) {

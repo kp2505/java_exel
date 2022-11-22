@@ -2,13 +2,13 @@ data/Data.java
  data.Data
 services/LogService.java
  services.LogService
-ReportExcelReader.java
- ReportExcelReader
+services/TimeService.java
+ services.TimeService
 facades/DatabaseFacade.java
  facades.DatabaseFacade
 ReportExcelWriter.java
  ReportExcelWriter
 Main.java
  Main
-services/TimeService.java
- services.TimeService
+ReportExcelReader.java
+ ReportExcelReader
