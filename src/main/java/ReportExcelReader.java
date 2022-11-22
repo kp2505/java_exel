@@ -1,3 +1,4 @@
+import data.Data;
 import facades.DatabaseFacade;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -8,15 +9,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 class ReportExcelReader {
-    DatabaseFacade databaseFacade;
-
-    public ReportExcelReader(DatabaseFacade databaseFacade) {
-        this.databaseFacade = databaseFacade;
-    }
-
-    public void read() {
+    public List read() {
         InputStream inputStream = null;
         XSSFWorkbook workBook = null;
 
@@ -29,53 +26,45 @@ class ReportExcelReader {
 
         Sheet sheet = workBook.getSheetAt(0);
         Iterator<Row> rows = sheet.iterator();
-        int i = 0;
-        String result = "(";
+        List dataList = new LinkedList();
 
         while (rows.hasNext()) {
-            i++;
             Row row = rows.next();
-            Iterator<Cell> cells = row.iterator();
-
-            result += this.getQueryByRow(cells);
-
-            if (i % 1000 == 0) {
-                result += ");";
-                System.out.println(i);
-                this.databaseFacade.insert(result);
-                result = "(";
-            } else {
-                Boolean hasNext = rows.hasNext();
-
-                result += hasNext ? "),(" : ");";
-                if (!hasNext) {
-                    this.databaseFacade.insert(result);
-                }
-            }
+            dataList.add(this.getDataByRow(row));
         }
+
+        return dataList;
     }
 
-    public String getQueryByRow(Iterator<Cell> cells) {
-        String query = "";
+    public Data getDataByRow(Row row) {
+        Iterator<Cell> cells = row.iterator();
+        String
+                val1 = "",
+                val2 = "",
+                val3 = "",
+                val4 = "";
+        int i = 0;
 
         while (cells.hasNext()) {
             Cell cell = cells.next();
-            String queryPart = this.getQueryPart(cell, cells.hasNext());
 
-            query += queryPart;
+            i++;
+            switch (i) {
+                case 1:
+                    val1 = cell.getStringCellValue();
+                    break;
+                case 2:
+                    val2 = cell.getStringCellValue();
+                    break;
+                case 3:
+                    val3 = cell.getStringCellValue();
+                    break;
+                case 4:
+                    val4 = cell.getStringCellValue();
+                    break;
+            }
         }
 
-        return query;
-    }
-
-    public String getQueryPart(Cell cell, Boolean hasNext) {
-        String queryPart = "";
-        queryPart += "'" + cell.getStringCellValue() + "'";
-
-        if (hasNext) {
-            queryPart += ",";
-        }
-
-        return queryPart;
+        return new Data(val1, val2, val3, val4);
     }
 }

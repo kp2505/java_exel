@@ -11,15 +11,17 @@ public class Main {
     public static void main(String args[]) {
         TimeService timeService = new TimeService();
         DatabaseFacade databaseFacade = new DatabaseFacade();
-        ReportExcelReader reader = new ReportExcelReader(databaseFacade);
+        ReportExcelReader reader = new ReportExcelReader();
         ReportExcelWriter  writer = new ReportExcelWriter();
 
         databaseFacade.clearTable();
-        reader.read();
+        List<Data> inputData = reader.read();
 
-        List<Data> data = databaseFacade.select();
+        databaseFacade.insert(inputData);
 
-        writer.write(data);
+        List<Data> outputData = databaseFacade.select();
+
+        writer.write(outputData);
         timeService.logTimeOffset();
     }
 }

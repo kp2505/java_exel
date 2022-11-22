@@ -3,6 +3,7 @@ package facades;
 import data.Data;
 
 import java.sql.*;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,16 +31,49 @@ public class DatabaseFacade {
     }
 
 
-    public void insert(String query) {
+    public void insert(List<Data> dataList) {
         try (Connection connection = this.getConnection()) {
             Statement stmt = connection.createStatement();
+            String query = "";
 
-            stmt.executeUpdate("INSERT into test values "+ query);
-            System.out.println("Connection successful!");
+            int i = 0;
+            Iterator<Data> it  = dataList.iterator();
+
+            while (it.hasNext()) {
+                Data item = it.next();
+                i++;
+                query += this.getQueryPart(item);
+                Boolean isUpdateStep = i % 10000 == 0 || !it.hasNext();
+
+                if (isUpdateStep) {
+                    System.out.println(i);
+                    stmt.executeUpdate("INSERT into test values "+ query +';');
+                    query = "";
+                } else {
+                    query += ",";
+                }
+            }
+
+            System.out.println("Insert successful!");
         } catch (SQLException e) {
             System.out.println("Connection failed!");
             e.printStackTrace();
         }
+    }
+
+    public String getQueryPart(Data data) {
+        return "(" +
+                this.getQueryElement(data.val1, false) +
+                this.getQueryElement(data.val2, false) +
+                this.getQueryElement(data.val3, false) +
+                this.getQueryElement(data.val4, true) +
+                ")";
+    }
+
+    public String getQueryElement(String element,Boolean isLast) {
+        String separator = isLast ? "" : ",";
+
+        return "'"+element+"'" + separator;
     }
 
     public List select() {
