@@ -26,17 +26,36 @@ class ReportExcelReader {
 
         Sheet sheet = workBook.getSheetAt(0);
         Iterator<Row> rows = sheet.iterator();
+
+        return this.getDataList(rows);
+    }
+
+    public List getDataList(Iterator<Row> rows) {
         List dataList = new LinkedList();
+        long rowNumber = 0;
+        //Дефолтный порядок
+        int[] validPositions = {1, 2, 3, 4};
 
         while (rows.hasNext()) {
+            rowNumber++;
             Row row = rows.next();
-            dataList.add(this.getDataByRow(row));
+            if (rowNumber == 1) {
+                validPositions = getValidPositionField(row);
+            } else {
+                dataList.add(this.getDataByRow(row, validPositions));
+            }
         }
 
         return dataList;
     }
 
-    public Data getDataByRow(Row row) {
+    public int[] getValidPositionField(Row row) {
+        int[] positions = {4, 2, 3, 1};
+
+        return positions;
+    }
+
+    public Data getDataByRow(Row row, int[] validPositions) {
         Iterator<Cell> cells = row.iterator();
         String
                 val1 = "",
@@ -49,19 +68,21 @@ class ReportExcelReader {
             Cell cell = cells.next();
 
             i++;
-            switch (i) {
-                case 1:
-                    val1 = cell.getStringCellValue();
-                    break;
-                case 2:
-                    val2 = cell.getStringCellValue();
-                    break;
-                case 3:
-                    val3 = cell.getStringCellValue();
-                    break;
-                case 4:
-                    val4 = cell.getStringCellValue();
-                    break;
+
+            if (i == validPositions[0]) {
+                val1 = cell.getStringCellValue();
+            }
+
+            if (i == validPositions[1]) {
+                val2 = cell.getStringCellValue();
+            }
+
+            if (i == validPositions[2]) {
+                val3 = cell.getStringCellValue();
+            }
+
+            if (i == validPositions[3]) {
+                val4 = cell.getStringCellValue();
             }
         }
 

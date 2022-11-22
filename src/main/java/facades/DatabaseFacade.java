@@ -43,7 +43,7 @@ public class DatabaseFacade {
                 Data item = it.next();
                 i++;
                 query += this.getQueryPart(item);
-                Boolean isUpdateStep = i % 10000 == 0 || !it.hasNext();
+                Boolean isUpdateStep = i % 1000 == 0 || !it.hasNext();
 
                 if (isUpdateStep) {
                     System.out.println(i);
