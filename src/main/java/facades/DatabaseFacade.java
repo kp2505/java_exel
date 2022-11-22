@@ -1,6 +1,7 @@
 package facades;
 
 import data.Data;
+import services.ConnectionService;
 import services.LogService;
 
 import java.sql.*;
@@ -10,22 +11,15 @@ import java.util.List;
 
 public class DatabaseFacade {
     LogService logService;
+    ConnectionService connectionService;
 
     public DatabaseFacade(LogService logService) {
         this.logService = logService;
-    }
-
-    public Connection getConnection() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/world?serverTimezone=Europe/Moscow&useSSL=false";
-        String username = "root";
-        String password = "root";
-        this.logService.log("Connecting...");
-
-        return DriverManager.getConnection(url, username, password);
+        this.connectionService = new ConnectionService(logService);
     }
 
     public void clearTable() {
-        try (Connection connection = this.getConnection()) {
+        try (Connection connection = this.connectionService.getConnection()) {
             Statement stmt = connection.createStatement();
 
             stmt.executeUpdate("delete from test;");
@@ -38,7 +32,7 @@ public class DatabaseFacade {
 
 
     public void insert(List<Data> dataList) {
-        try (Connection connection = this.getConnection()) {
+        try (Connection connection = this.connectionService.getConnection()) {
             Statement stmt = connection.createStatement();
             String query = "";
 
@@ -84,7 +78,7 @@ public class DatabaseFacade {
 
     public List select() {
         List ll = new LinkedList();
-        try (Connection connection = this.getConnection()) {
+        try (Connection connection = this.connectionService.getConnection()) {
             Statement stmt = connection.createStatement();
             ResultSet rs;
 
