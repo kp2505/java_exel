@@ -1,15 +1,19 @@
 package services;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 public class LogService {
+    PrintStream printStream;
+
     public LogService() {
         try {
 
-            // Если нужно в новый файл System.setErr(new PrintStream(new File("log.txt")));
-            System.setErr(new PrintStream(new FileOutputStream("log.txt", true)));
+            System.setErr(new PrintStream(new File("log.txt")));
+            this.printStream = new PrintStream(new File("log2.txt"));
+            //System.setErr(new PrintStream(new FileOutputStream("log.txt", true)));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -23,5 +27,9 @@ public class LogService {
     public void log(int message) {
         System.err.println(message);
         System.out.println(message);
+    }
+
+    public void writeUnhandledRow(String row) {
+        this.printStream.println(row);
     }
 }

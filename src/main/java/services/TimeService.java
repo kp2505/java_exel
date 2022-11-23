@@ -13,6 +13,6 @@ public class TimeService {
     public void logTimeOffset() {
         long endTime = System.currentTimeMillis();
 
-        this.logService.log("###FINISHED###\n That took " + (endTime - this.startTime)/1000 + " seconds");
+        this.logService.log("###FINISHED111###\n That took " + (endTime - this.startTime)/1000 + " seconds");
     }
 }
