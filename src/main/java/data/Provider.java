@@ -31,8 +31,8 @@ public class Provider {
         this.count = count;
         this.minCount = minCount;
         this.price = price;
-        this.maxPrice = maxPrice;
-        this.minPrice = minPrice;
+        this.maxPrice = Math.ceil(maxPrice);
+        this.minPrice = Math.ceil(minPrice);
         this.rating = rating;
     }
 

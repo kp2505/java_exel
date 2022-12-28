@@ -48,7 +48,7 @@ public class ProvidersConfigReader {
                             "123",
                             "test",
                             2.2,
-                            1.6,
+                            1.66,
                             10000000,
                             0
                     ));
