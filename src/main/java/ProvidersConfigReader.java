@@ -33,8 +33,8 @@ public class ProvidersConfigReader {
                     Sheet sheet = exelReaderService.read(fileFolder + "\\" + fileName);
                     Iterator<Row> rows = sheet.iterator();
                     System.out.println("Forbidden_providers_config.xlsx started");
-                    //forbiddenBrands = this.getForbiddenBrands(rows);
-                    //System.out.println("Forbidden_providers_config.xlsx finished");
+                    forbiddenBrands = this.getForbiddenBrands(rows);
+                    System.out.println("Forbidden_providers_config.xlsx finished");
                 }
 
                 if (fileName.equals("Provider_config.xlsx")) {
@@ -43,18 +43,9 @@ public class ProvidersConfigReader {
                     System.out.println("Provider_config.xlsx started");
                     providersInfo = this.getProviderInfoList(rows);
                     System.out.println("Provider_config.xlsx finished");
-                    providersInfo.add(new ProviderInfo(
-                            1,
-                            "123",
-                            "test",
-                            2.2,
-                            1.66,
-                            10000000,
-                            0
-                    ));
                 }
 
-                if (fileName.equals("tes.xlsx")) {
+                if (fileName.equals("SKU_config.xlsx")) {
                     Sheet sheet = exelReaderService.read(fileFolder + "\\" + fileName);
                     Iterator<Row> rows = sheet.iterator();
                     System.out.println("SKU_config_.xlsx started");

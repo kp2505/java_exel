@@ -81,6 +81,8 @@ class ReportExcelReader {
         Boolean isMinCountValid = provider.minCount == 1 || provider.minCount == 0;
         Boolean isCountValid = provider.count != 0;
 
+        this.logService.writeUnhandledRow(provider.getProvider());
+
         return isSkuValid && isPriceValid && isBrandNameValid && isMinCountValid && isCountValid;
     }
 
@@ -465,12 +467,14 @@ class ReportExcelReader {
                 String cell = cells.next().replaceAll("\"", "");
 
                 i++;
+                //this.logService.log(cell);
+                //this.logService.log(i);
                 if (i == validPositions[0]) {
                     vendorCode = cell;
                 }
 
                 if (i == validPositions[1]) {
-                    brand = "FEBEST";
+                    brand = cell;
                 }
 
                 if (i == validPositions[2]) {
